@@ -1,0 +1,64 @@
+Other Notes
+
+Issues / Challenges in reverse chronological order
+
+
+This error came up on "make test" ran again as sudo and still got it
+found a couple other similar issues online (below) and both seemed so say you can ignore the error so I'll just keep this in mind moving forward and revisit if other issues arise.
+
+Articles:
+
+"test/simple/test-fs-access.js fails most of the time #9033" [https://github.com/nodejs/node-v0.x-archive/issues/9033]
+
+"failed test: parallel/test-fs-access.js #1031" [https://github.com/nodejs/node/issues/1031]
+
+Error listing in "make test" listing
+
+/usr/bin/python tools/test.py --mode=release message parallel sequential -J
+=== release test-async-wrap-check-providers ===
+Path: parallel/test-async-wrap-check-providers
+Not all keys have been used:
+[ 'PIPECONNECTWRAP',
+  'SHUTDOWNWRAP',
+  'TCPCONNECTWRAP',
+  'TLSWRAP',
+  'UDPSENDWRAP',
+  'WRITEWRAP' ]
+events.js:141
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EACCES /root/node-v4.1.2/test/tmp.0/test.sock
+    at Object.exports._errnoException (util.js:849:11)
+    at exports._exceptionWithHostPort (util.js:872:20)
+    at Server._listen2 (net.js:1218:19)
+    at listen (net.js:1267:10)
+    at Server.listen (net.js:1357:5)
+    at Object.<anonymous> (/root/node-v4.1.2/test/parallel/test-async-wrap-check                                             -providers.js:57:4)
+    at Module._compile (module.js:434:26)
+    at Object.Module._extensions..js (module.js:452:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+Command: out/Release/node /root/node-v4.1.2/test/parallel/test-async-wrap-check-                                             providers.js
+=== release test-fs-access ===
+Path: parallel/test-fs-access
+assert.js:311
+    throw actual;
+    ^
+
+Error: EACCES: permission denied, access '/root/node-v4.1.2/test/parallel/test-fs-access.js'
+    at Error (native)
+    at Object.fs.accessSync (fs.js:203:11)
+    at /root/node-v4.1.2/test/parallel/test-fs-access.js:106:6
+    at Function._throws (assert.js:293:5)
+    at Function.assert.doesNotThrow (assert.js:324:11)
+    at Object.<anonymous> (/root/node-v4.1.2/test/parallel/test-fs-access.js:105:8)
+    at Module._compile (module.js:434:26)
+    at Object.Module._extensions..js (module.js:452:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+Command: out/Release/node /root/node-v4.1.2/test/parallel/test-fs-access.js
+
+
+
+

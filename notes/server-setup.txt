@@ -1,0 +1,7 @@
+Server Installs
+here is a list of changes/files/urls that I made to the server
+
+node.js
+https://nodejs.org/download/release/latest/node-v4.1.2.tar.gz
+
+

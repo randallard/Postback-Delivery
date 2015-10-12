@@ -1,0 +1,12 @@
+Resources 
+
+Books / Articles that I used as references 
+
+Smashing Node.js:JavaScript Everywhere
+By Guillermo Rauch
+John Wiley & Sons © 2012
+
+Integrating Node.js with PHP
+https://entwickler.de/webandphp/integrating-node-js-with-php-125830.html
+
+
