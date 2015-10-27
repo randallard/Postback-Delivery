@@ -1,5 +1,46 @@
 Server Installs
-here is a list of changes/files/urls that I made to the server
+
+FUNCTIONALITY
+requests can be made to /i or /ingest.php
+data is pushed to redis list 'postbackQueue'
+set-up pm2 for daemonization (see pm2-setup.txt)
+
+TO DO:
+Probably not as easy as 'key' 'value' - maybe need to update ingest to get params/labels from endpoint
+Look into LUA - use predis readme?
+Make sure redis, nginx, and node app start autmatically on server start
+Check other redis.conf values in /etc for optimization
+
+
+here is a list of changes/files/urls applied to the server - most recent changes are at the top of the list
+
+
+
+implement redis push in ingest.php
+	- test with [redis-cli lrange postbackQueue 0 -1]
+
+set up redis.conf in etc
+	- set to daemonize for automatic startup
+	- check other config values to optimize at a later date
+
+in cgi-bin clone predis [git clone git://github.com/nrk/predis.git]
+
+install tcl for redis make test [apt-get install tcl-tls]
+install redis [http://download.redis.io/redis-stable.tar.gz]
+
+in /usr/share/nginx/html/i ln -s ../ingest.php index.html
+created /usr/share/nginx/html/i for symbolic link to ingest.php
+created /usr/share/nginx/html/ingest.php to receive data
+created /usr/share/nginx/html/index.php to send data
+
+in /etc/php5/fpm/php.ini
+cgi.fix_pathinfo=0
+
+install nginx and php5
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-14-04
+
+added non-root sudo user dirks
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04
 
 node.js
 https://nodejs.org/download/release/latest/node-v4.1.2.tar.gz

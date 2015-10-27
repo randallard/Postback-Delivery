@@ -1,0 +1,66 @@
+PM2 Setup [https://github.com/luin/pm2]
+[https://www.digitalocean.com/community/tutorials/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps]
+
+
+Install pm2 command line globally
+npm install pm2@latest -g 
+
+run pm2 verification test
+
+git clone https://github.com/Unitech/pm2.git
+cd pm2
+npm install  # Or do NODE_ENV=development npm install if some packages are missing
+npm test
+
+install dependencies for pm2 verification tests
+
+sudo apt-get install build-essential
+wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh
+nvm install v0.11.9
+nvm use v0.11.9
+nvm alias default v0.11.9
+
+
+
+start node app with name 
+pm2 start app.js --name appname
+
+use graceful reload for 0s downtime app refresh
+pm2 gracefulReload [all|appname]
+
+set up graceful reload for 0s downtime reload and properly exit
+
+add this to app.js
+
+process.on('message', function(msg) {
+  if (msg == 'shutdown') {
+    // Your process is going to be reloaded
+    // Close all database/socket.io/* connections
+    console.log('Closing all connections...');
+    setTimeout(function() {
+      console.log('Finished closing connections');
+      // You can exit to faster the process or it will be
+      // automatically killed after 4000ms.
+      // You can override the timeout by modifying PM2_GRACEFUL_TIMEOUT
+      process.exit(0);
+    }, 1500);
+  }
+});
+
+Generate init script for restart node.js on server restart
+pm2 startup ubuntu
+
+start health monitor
+pm2 web
+
+then use browser to watch http://postback-agent.com:9615
+(port configurable in  ~/.pm2/custom_options.sh)
+
+monitor logs
+pm2 logs --timestamp --lines 0
+
+Monitor CPU and memory usage of every node process managed by pm2
+pm2 monit
+
+List info about all processes managed by pm2
+pm2 list
