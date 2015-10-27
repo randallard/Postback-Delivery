@@ -20,13 +20,19 @@ implement redis push in ingest.php
 	- test with [redis-cli lrange postbackQueue 0 -1]
 
 set up redis.conf in etc
-	- set to daemonize for automatic startup
+	- set to daemonize 
 	- check other config values to optimize at a later date
+
+set redis to start automatically
+update-rc.d redis_6379 defaults
 
 in cgi-bin clone predis [git clone git://github.com/nrk/predis.git]
 
 install tcl for redis make test [apt-get install tcl-tls]
-install redis [http://download.redis.io/redis-stable.tar.gz]
+install redis
+ - [https://www.digitalocean.com/community/tutorials/how-to-install-and-use-redis]
+ - redis [http://download.redis.io/redis-stable.tar.gz]
+ - 
 
 in /usr/share/nginx/html/i ln -s ../ingest.php index.html
 created /usr/share/nginx/html/i for symbolic link to ingest.php

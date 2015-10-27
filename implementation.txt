@@ -1,0 +1,24 @@
+Postback Delivery Implementation
+
+pm2 start/manage apps on restart
+pop-from-redis - pops data from redis queue
+receiver-one - test data receiver
+
+is redis starting automatically?
+
+monitor at http://postback-agent.com:9615
+and 
+pm2 logs
+and 
+pm2 monit
+
+after changing a node, use pm2 gracefulReload [all|appname]
+
+test posting data to ingest
+/root/Postback-Delivery/sites/postback-agent.com/html/post-request.html
+
+data is pushed to redis list 'postbackQueue'
+/root/Postback-Delivery/sites/postback-agent.com/html/ingest.php
+
+
+

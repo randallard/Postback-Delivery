@@ -63,14 +63,13 @@ var postData = {
 //	might add ability to take ingest post data as well
 	if($thisMethod == "GET"){
 			$thisUrl = $thisStartUrl;
-			foreach($dataItem as $key => $value) {
-				$thisUrl = str_replace('{'.$key.'}',$value,$thisUrl);
+			foreach($postData->{'data'} as $dataItem) {
+				$thisUrl = str_replace('{'.$dataItem->{'key'}.'}',$dataItem->{'value'},$thisUrl);
 			}
 			$thisUrl = str_replace('{','',$thisUrl);
 			$thisUrl = str_replace('}','',$thisUrl);
 			$thisJSON = json_encode( array('method' => $thisMethod, 'url' => $thisUrl ));
 			$redis->rpush("postbackQueue",$thisJSON); 
-		}
 	}
 //	else if( $thisMethod == "POST") {
 //			$thisUrl = $thisStartUrl;
