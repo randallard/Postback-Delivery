@@ -1,0 +1,7 @@
+{
+  "name": "popper",
+  "version": "0.0.1",
+  "description": "pop items from redis queue",
+  "dependencies": {}
+}
+
