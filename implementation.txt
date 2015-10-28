@@ -1,11 +1,29 @@
 Postback Delivery Implementation
 
+use hosts to set computer to resolve postback-agent.com to 45.55.35.202
+browse to http://postback-agent.com/post-request.html
+Stopwatch on sets timestamps to be visible in the endpoint's GET request
+send the Postback Request with the 'Post to /ingest.php' button
+response from ingest.php is printed to the browser
+
+monitor service interactions in a shell with 'pm2 logs'
+pop-from-redis is the node that pulls data from the redis queue and sends to the endpoint
+receiver-one is the endpoint - it adds the received timestamp (down to milliseconds) in the response but does not see the timestamps unless stopwatch is 'on'
+
+still working on a visualization of the response times 
+this will be in a node that will be the default for the server
+here I should show the pm2 logs 
+
+need to create another login for keymetrics as well
+
+
+
+
+
 pm2 start/manage apps on restart
 pop-from-redis - pops data from redis queue
 receiver-one - test data receiver
 
-monitor at http://postback-agent.com:9615
-and 
 pm2 logs
 and 
 pm2 monit
@@ -36,6 +54,8 @@ pop from redis and set another timestamp (R2)
 IF stopwatch = 'on' send S1,R1,S2,R2 and another timestamp (S3)
 receiver-one.com
 receive and set another timestamp (R3)
+
+still to do
 
 write to a log with data
 response-time.com
