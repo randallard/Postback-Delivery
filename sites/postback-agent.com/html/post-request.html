@@ -8,6 +8,10 @@ var postData;
 var postTo = 'i';
 $(document).ready(function(){
 	setPostData();
+	$('#switchWatch').click(function(){
+               	$('#stopwatch').text( $('#stopwatch').text() == 'on' ? 'off' : 'on' );
+		setPostData();
+        });
 	$('#switchMethod').click(function(){
                	$('#formMethod').text( $('#formMethod').text() == 'POST' ? 'GET' : 'POST' );
 		setPostData();
@@ -40,15 +44,24 @@ function setPostData() {
         };
 }
 function postAJAX(){
-	var dateNow = new Date();
-        $("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+dateNow.toLocaleString()+"]</p>");
+        //var dateNow = new Date();
+        //$("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+dateNow.toLocaleString()+"]</p>");
+
+        // add s1 property to postData to hold first send time for analytics
+        if ( $('#stopwatch').text() == 'on' ) { 
+		postData.S1 = (new Date()).getTime(); 
+	        $("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+postData.S1.toLocaleString()+"]</p>");
+	}
+	else {
+	        $("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+ (new Date()).getTime()+"]</p>");
+	}
 	
 	$.ajax({
 	    type: 'POST',
 	    url: 'http://postback-agent.com/' + postTo,
 	    data: JSON.stringify(postData),
-	    success: function(result){
-			$("#divResponse").prepend("Success:"+result+"<br />");
+	    success: function(xhr, status, result){
+			$("#divResponse").prepend("Success:"+JSON.stringify(result)+"<br />");
 	},
 
  
@@ -83,7 +96,8 @@ function postAJAX(){
 </script>
 </head>
 <body>
-Method:<span id='formMethod'>POST</span> <button id='switchMethod'>Switch Method</button><br / -->
+Stopwatch: <span id='stopwatch'>on</span> <button id='switchWatch'>Switch Stopwatch</button><br />
+Method: <span id='formMethod'>GET</span> <button id='switchMethod'>Switch Method</button><br />
 <button id='justI'>Post to /i</button>
 <button id='ingest'>Post to /ingest.php</button>
 <h2>Response:</h2>

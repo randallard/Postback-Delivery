@@ -11,6 +11,7 @@ process.on('message', function(msg) {
 });
 
 http.createServer(function (req, res) {
+  var R3 = (new Date).getTime();
   var dataReceived;
   var receivedMethod = '[' + req.method + ']';
   if (req.method == 'POST') {
@@ -26,7 +27,7 @@ http.createServer(function (req, res) {
         dataReceived = req.url;
   }
   var dateNow = new Date();
-  console.log(dateNow.toLocaleString() + '\tData Received\t' + receivedMethod + '\t' + dataReceived);
+  console.log(dateNow.toLocaleString() + '\tData Received\t' + receivedMethod + '\t' + dataReceived + '&R3=' + R3);
 
   res.writeHead(200);
   res.end('receiver-one.com heard: [' + req.url + ']');

@@ -29,11 +29,14 @@ Analytics
 post-request.html
 send with timestamp (S1) in object
 receive and set another timestamp (R1)
-push to redis with S1,R1 and another sent timestamp (S2)
+push to redis with 
+- stopwatch = 'on' if S1 was sent - otherwise stopwatch = 'off'
+- S1,R1 and another sent timestamp (S2)
 pop from redis and set another timestamp (R2)
-send from node with S1,R1,S2,R2 and another timestamp (S3)
+IF stopwatch = 'on' send S1,R1,S2,R2 and another timestamp (S3)
 receiver-one.com
 receive and set another timestamp (R3)
+
 write to a log with data
 response-time.com
 read and average response times for each stage

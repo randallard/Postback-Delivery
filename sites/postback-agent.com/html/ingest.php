@@ -1,4 +1,26 @@
 <?php
+	$thisR1 = round(microtime(true) * 1000);
+
+	$postData = json_decode(file_get_contents('php://input'));
+	$thisMethod = $postData->{'endpoint'}->{'method'};
+
+	// See if we've implemented a way to process this method
+	$implementedMethods = 'GET|';
+	if( substr_count( $implementedMethods, strtoupper($thisMethod)) == 0){
+		// 501 not implemented
+		header("HTTP/1.1 501 [$thisMethod] has not been implemented, please use [$implementedMethods]");
+	}
+
+	$thisStartUrl = $postData->{'endpoint'}->{'url'};
+
+	if(isset($postData->{'S1'})) { 
+		$thisS1 = $postData->{'S1'};
+		$stopwatch = 'on';
+	}
+	else { 
+		$stopwatch = 'off';
+	}
+
 
 // CONNECT TO REDIS
 require "/var/www/postback-agent.com/cgi-bin/predis/autoload.php";
@@ -32,10 +54,6 @@ catch (Exception $e) {
 #	foreach data element
 #		send [method]:[endpoint] to redis with {key}/{value}/{bar} replaced
 
-	$postData = json_decode(file_get_contents('php://input'));
-	$thisMethod = $postData->{'endpoint'}->{'method'};
-	$thisStartUrl = $postData->{'endpoint'}->{'url'};
-
 	list($host,$getParameters) = explode('?',$thisStartUrl);
 	$keyValuePairs = explode('&',$getParameters);
 	$dataItemsTemplate = new ArrayObject();
@@ -52,32 +70,6 @@ catch (Exception $e) {
         foreach ( $dataItemsTemplate as &$templateItem ) {
 		if($templateItem->key != $templateItem->value) { echo "<br />Warning: Data Key '$templateItem->key' does not match Data Value Index '$templateItem->value' in URI: $templateItem->key=".'{'.$templateItem->value.'}'; }
         }
-//	$postData = json_decode(file_get_contents('php://input'), TRUE);
-//	$thisMethod = $_POST["endpoint"]["method"];
-//	$thisStartUrl = $_POST["endpoint"]["url"];
-
-/*  EXPECTED POST DATA
-
-var postData = {
-          "endpoint":{
-            "method":"GET",
-            "url":"http://sample_domain_endpoint.com/data?key={key}&value={value}&foo={bar}"
-          },
-          "data":[
-            {
-              "key":"Azureus",
-              "value":"Dendrobates"
-            },
-            {
-              "key":"Phyllobates",
-              "value":"Terribilis"
-            }
-          ]
-        };
-
-*/
-//	might add ability to take ingest post data as well
-
 
 	if($thisMethod == "GET"){
 			foreach($postData->data as &$dataItem) {
@@ -91,12 +83,22 @@ var postData = {
 					else { echo '<br />Notice: No Data For ' . $dataTemplate->key . '={' . $dataTemplate->value . '}'; }
 				}
 				echo "<br />Posting Data: $thisUrl";
-				$thisJSON = json_encode( array('method' => $thisMethod, 'url' => $thisUrl ));
+				$thisPush = array('method' => $thisMethod, 'url' => $thisUrl, 'R1' => $thisR1, 'stopwatch' => $stopwatch, 'S2' => round(microtime(true) * 1000) );
+				if ( isset($thisS1) ) {	
+					$arrayS1 = array('S1' => $thisS1);
+					$thisPush = array_merge($arrayS1,$thisPush); 
+				}
+
+				$arrayString = "<br />thisPush:[";	
+				foreach ($thisPush as $key => $value) {
+					$arrayString .= "$key:[$value];";
+				}
+				echo $arrayString;
+				
+				$thisJSON = json_encode( $thisPush );
 				$redis->rpush("postbackQueue",$thisJSON); 
 			}
 	}
-
-
 //	else if( $thisMethod == "POST") {
 //			$thisUrl = $thisStartUrl;
 //			foreach($postData->{'data'} as &$dataItem) {
