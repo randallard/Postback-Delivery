@@ -1,17 +1,19 @@
 var redis    = require('redis').createClient(),
-    request  = require('request'),
-    fs       = require('fs');
+    request  = require('request');
+
+// for safe shutdown do this - account for redis here as well
+process.on('message', function(msg) {  
+  if (msg === 'shutdown') {
+    //close_all_connections();
+    //delete_cache();
+    server.close();
+    process.exit(0);
+  }
+});
 
 redis.on('error', function (err) {
         var dateNow = new Date();
         console.log(dateNow.toLocaleString() + '\tError\t' + err);
-        fs.appendFile('log.txt'
-            , dateNow.toLocaleString() + '\tError\t'+ err +'\n'
-            , function(err){
-                if (err) throw err;
-            }
-        );
-
 });
 
 sendData();
@@ -22,20 +24,17 @@ function sendData(){
     var options = {
       uri: postbackData.url,
       method: postbackData.method,
-      form: postbackData.data,
       timeout: 10000,
       followRedirect: true,
       maxRedirects: 10
     };
+    if ( postbackData.method == 'POST' ) {
+	options.form = postbackData.data;
+    }
     request(options, function(error, response, body) {
         var dateNow = new Date();
-        console.log(dateNow.toLocaleString() + '\tReceived\t' + body + '\t' + response + '\t' + error);
-        fs.appendFile('log.txt'
-            , dateNow.toLocaleString() + '\tReceived\t' + body + '\t' + response + '\t' + error + '\n'
-            , function(err){
-                if (err) throw err;
-            }
-        );
+        var logString = dateNow.toLocaleString() + '\tReceived\tBody:[' + body + ']\tStatus:[' + response.statusCode + ']\tError:[' + error + ']';
+        console.log(logString);
     });
     process.nextTick(sendData);
   });
