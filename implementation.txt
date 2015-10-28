@@ -4,8 +4,6 @@ pm2 start/manage apps on restart
 pop-from-redis - pops data from redis queue
 receiver-one - test data receiver
 
-is redis starting automatically?
-
 monitor at http://postback-agent.com:9615
 and 
 pm2 logs
@@ -14,11 +12,32 @@ pm2 monit
 
 after changing a node, use pm2 gracefulReload [all|appname]
 
-test posting data to ingest
-/root/Postback-Delivery/sites/postback-agent.com/html/post-request.html
+test sending data to ingest
+/var/www/postback-agent.com/html/post-request.html
 
 data is pushed to redis list 'postbackQueue'
-/root/Postback-Delivery/sites/postback-agent.com/html/ingest.php
+/var/www/postback-agent.com/html/ingest.php
 
+data is popped from redis
+/var/www/postback-agent.com/popper/app.js
 
+data receiver
+/var/www/receiver-one.com/app.js
+
+Analytics
+
+post-request.html
+send with timestamp (S1) in object
+receive and set another timestamp (R1)
+push to redis with S1,R1 and another sent timestamp (S2)
+pop from redis and set another timestamp (R2)
+send from node with S1,R1,S2,R2 and another timestamp (S3)
+receiver-one.com
+receive and set another timestamp (R3)
+write to a log with data
+response-time.com
+read and average response times for each stage
+show top 10 longest response times
+show top 10 shortest response times
+click to show response times for data posted within 2 seconds of that item
 
