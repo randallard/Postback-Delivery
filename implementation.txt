@@ -14,11 +14,14 @@ still working on a visualization of the response times
 this will be in a node that will be the default for the server
 here I should show the pm2 logs 
 
-need to create another login for keymetrics as well
+
+Known issues / Todo:
+
+browsing to 45.55.35.202 redirects to http://postback-agent.com/ingest.php
+posting from http://45.55.35.202/post-request.html errs out
 
 
-
-
+Other notes
 
 pm2 start/manage apps on restart
 pop-from-redis - pops data from redis queue
