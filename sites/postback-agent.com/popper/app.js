@@ -47,7 +47,7 @@ function sendData(){
     
     request(options, function(error, response, body) {
         var dateNow = new Date();
-        var logString = dateNow.toLocaleString() + '\tReceived\tBody:[' + body + ']\tStatus:[' + response.statusCode + ']\tError:[' + error + ']';
+        var logString = dateNow.toLocaleString() + '\tReceived\tBody:[' + body + ']\tStatus:[' + response.statusCode + ']' + ( error == null ? "" : '\tError:[' + error + ']' );
         console.log(logString);
     });
     process.nextTick(sendData);
