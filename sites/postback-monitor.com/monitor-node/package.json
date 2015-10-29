@@ -1,0 +1,9 @@
+{
+  "name": "postback testing",
+  "version": "0.0.1",
+  "description": "show response times for postback delivery",
+  "dependencies": {
+    "express": "~4.10.2",
+    "socket.io": "~1.2.0"
+  }
+}

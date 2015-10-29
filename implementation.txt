@@ -17,6 +17,11 @@ here I should show the pm2 logs
 
 Known issues / Todo:
 
+Set up postback-monitor.com to show server activity - IP address should default to here
+I got this set up as a node based on the socket.io simple chat client
+next up: create a branch based on this post:[http://stackoverflow.com/questions/27953338/socket-io-trigger-events-between-two-node-js-apps]
+
+
 browsing to 45.55.35.202 redirects to http://postback-agent.com/ingest.php
 posting from http://45.55.35.202/post-request.html errs out
 

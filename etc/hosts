@@ -7,8 +7,9 @@
 127.0.1.1 Candidate.Playground-Ryan.Dirks Candidate.Playground-Ryan.Dirks
 127.0.0.1 localhost
 
-127.0.0.1   postback-agent.com
-127.0.0.1   receiver-one.com
+45.55.35.202  postback-monitor.com
+45.55.35.202  postback-agent.com
+45.55.35.202  receiver-one.com
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 ip6-localhost ip6-loopback
