@@ -89,12 +89,6 @@ catch (Exception $e) {
 					$thisPush = array_merge($arrayS1,$thisPush); 
 				}
 
-				$arrayString = "<br />thisPush:[";	
-				foreach ($thisPush as $key => $value) {
-					$arrayString .= "$key:[$value];";
-				}
-				echo $arrayString;
-				
 				$thisJSON = json_encode( $thisPush );
 				$redis->rpush("postbackQueue",$thisJSON); 
 			}

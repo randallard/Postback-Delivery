@@ -49,48 +49,25 @@ function postAJAX(){
 
         // add s1 property to postData to hold first send time for analytics
         if ( $('#stopwatch').text() == 'on' ) { 
-		postData.S1 = (new Date()).getTime(); 
-	        $("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+postData.S1.toLocaleString()+"]</p>");
-	}
-	else {
-	        $("#divResponse").prepend("<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: ["+ (new Date()).getTime()+"]</p>");
-	}
+		postData.S1 = (new Date()).getTime();
+	} 
 	
 	$.ajax({
 	    type: 'POST',
 	    url: 'http://postback-agent.com/' + postTo,
 	    data: JSON.stringify(postData),
 	    success: function(xhr, status, result){
-			$("#divResponse").prepend("Success:"+JSON.stringify(result)+"<br />");
-	},
-
- 
-
-    // Code to run if the request fails; the raw request and
-
-    // status codes are passed to the function
-
-    error: function( xhr, status, errorThrown ) {
-
-        $("#divResponse").prepend( "Error: " + errorThrown +"<br />");
-
-        $("#divResponse").prepend( "Status: " + status +"<br />");
-
-        $("#divResponse").prepend( "XHR: " + xhr +"<br />");
-
-    },
-
- 
-
-    // Code to run regardless of success or failure
-
-    complete: function( xhr, status ) {
-
-        $("#divResponse").prepend( "The request is complete!<br />" );
-
-    }
-
-	
+			$("#divResponse").prepend("<p>Success: Status["+result.status+"]<dl><dt>Response</dt><dd>"+result.responseText+"</dd></dl>");
+	    },
+    	    error: function( xhr, status, errorThrown ) {
+                $("#divResponse").prepend( "Error: " + errorThrown +"<br />");
+                $("#divResponse").prepend( "Status: " + status +"<br />");
+                $("#divResponse").prepend( "XHR: " + xhr +"<br />");
+            },
+ 	    complete: function( xhr, status ) {
+    	        var completionMessage = "<p>Posted Data to /" + postTo + " :" + JSON.stringify(postData) + "<br />Sent at: [" + (( typeof postData.S1 !== "undefined" ) ? postData.S1 : (new Date()).getTime() ) + "]</p>";
+   	        $("#divResponse").prepend(completionMessage);
+	    }
 	});
 }
 </script>
