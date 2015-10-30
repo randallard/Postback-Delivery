@@ -5,7 +5,7 @@ I set this up to play with as postback-agent.com and somehow nixed the IP access
 
 45.55.35.202 postback-agent.com
 
-then browse to postback-agent.com/post-request.html
+then browse to <a href='http://postback-agent.com/post-request.html'>http://postback-agent.com/post-request.html</a>
 
 in the host file of the machine where your browser is running
 
