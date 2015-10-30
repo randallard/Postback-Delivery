@@ -5,6 +5,8 @@ I set this up to play with as postback-agent.com and somehow nixed the IP access
 
 45.55.35.202 postback-agent.com
 
+then browse to postback-agent.com/post-request.html
+
 in the host file of the machine where your browser is running
 
 Implementation notes (not polished) are in implementation.txt
