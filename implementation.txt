@@ -9,6 +9,8 @@ response from ingest.php is printed to the browser
 monitor service interactions in a shell with 'pm2 logs'
 pop-from-redis is the node that pulls data from the redis queue and sends to the endpoint
 receiver-one is the endpoint - it adds the received timestamp (down to milliseconds) in the response but does not see the timestamps unless stopwatch is 'on'
+postback-monitor receives time data from receiver-one and charts it
+
 
 still working on a visualization of the response times 
 this will be in a node that will be the default for the server
