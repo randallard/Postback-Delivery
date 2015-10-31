@@ -1,6 +1,6 @@
 var http = require('http');
+var io = require('socket.io-client');
 
-// account for redis data here as well?
 process.on('message', function(msg) {  
   if (msg === 'shutdown') {
 //    close_all_connections();
@@ -27,8 +27,14 @@ http.createServer(function (req, res) {
         dataReceived = req.url;
   }
   var dateNow = new Date();
-  console.log(dateNow.toLocaleString() + '\tData Received\t' + receivedMethod + '\t' + dataReceived + '&R3=' + R3);
+  console.log(dateNow.toLocaleString() + '\tData Received\t' + receivedMethod + '\t' + dataReceived + ' at [' + R3 + ']ms');
 
   res.writeHead(200);
   res.end('receiver-one.com heard: [' + req.url + ']');
+
+  socket = io.connect('http://postback-monitor.com', {
+      port: 3000
+  });
+  socket.on('connect', function () { console.log("connected to postback monitor"); });
+  socket.emit('postbackData', req.url+'&R3='+R3);
 }).listen(3001);
