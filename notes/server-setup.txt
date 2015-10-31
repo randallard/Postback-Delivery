@@ -14,6 +14,7 @@ Check other redis.conf values in /etc for optimization
 
 here is a list of changes/files/urls applied to the server - most recent changes are at the top of the list
 
+installed pm2 - see pm2-setup.txt
 
 
 implement redis push in ingest.php
