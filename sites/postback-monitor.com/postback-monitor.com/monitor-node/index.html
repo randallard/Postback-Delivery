@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<title>Postback Monitor</title>
+	<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script language="javascript" type="text/javascript" src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
+	<link href="http://www.flotcharts.org/flot/examples/examples.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+
+	var postDataArray = [];
+
+	$(function() {
+
+			totalPoints = 3000;
+
+		function getData() {
+			var res = [];
+			for (var i in postDataArray) {
+				if ( postDataArray[i].R1 >= (new Date()).getTime() - totalPoints ) {
+					res.push([postDataArray[i].R1, postDataArray[i].R3-postDataArray[i].R1]);
+				}
+				else { break; } 
+			}
+
+			return res;
+		}
+
+		// Set up the control widget
+
+		var updateInterval = 30;
+		$("#updateInterval").val(updateInterval).change(function () {
+			var v = $(this).val();
+			if (v && !isNaN(+v)) {
+				updateInterval = +v;
+				if (updateInterval < 1) {
+					updateInterval = 1;
+				} else if (updateInterval > 2000) {
+					updateInterval = 2000;
+				}
+				$(this).val("" + updateInterval);
+			}
+		});
+
+		var plot = $.plot("#placeholder", [ getData() ], {
+			series: {
+				shadowSize: 0	// Drawing is faster without shadows
+			},
+			yaxis: {
+				min: 0,
+				max: 100
+			},
+			xaxis: {
+				show: false
+			}
+		});
+
+		function displayPostDataArray(){
+			var arrayString = "";
+			for ( i in postDataArray ){
+				arrayString += postDataArray[i].postData+" R1:["+postDataArray[i].R1+"]<br />"
+			}
+          		$('#arrayDisplay').html(arrayString);
+
+		}
+
+		function update() {
+
+			displayPostDataArray();
+			plot.setData([getData()]);
+
+			// Since the axes don't change, we don't need to call plot.setupGrid()
+
+			plot.draw();
+			setTimeout(update, updateInterval);
+		}
+
+		update();
+
+		// Add the Flot version string to the footer
+
+		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	});
+      
+        var socket = io();
+        socket.on('postbackData', function(data){
+	  var urlArray = data.split("?");
+	  var parameterArray = urlArray[1].split("&");
+	  var dataArray = new Array(7);
+	  for ( var x in parameterArray ) {
+		var paramData = parameterArray[x].split("=");
+		if ("S1, R1, S2, R2, S3, R3".indexOf(paramData[0]) >= 0){
+			dataArray[paramData[0]] = paramData[1];
+		}
+	 	else{
+			if( typeof(dataArray["postData"]) !== "undefined" ){ 
+				dataArray["postData"] += "&"; 
+				dataArray["postData"] += paramData[0] + "=" + paramData[1];
+			}
+			else {dataArray["postData"] = paramData[0] + "=" + paramData[1];}
+		}
+	  }
+          $('#messages').append($('<li>').text(dataArray.postData+" R1:["+dataArray.R1+"]"));
+	  postDataArray.push(dataArray);
+        });
+
+	</script>
+
+</head>
+<body>
+
+	<div id="header">
+		<h2>Real-time updates</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+
+		<p>Time between updates: <input id="updateInterval" type="text" value="" style="text-align: right; width:5em"> milliseconds</p>
+
+	</div>
+	<div style="width:100%;float:left">
+	<div style="height: 400px; overflow: auto;float:left;">
+	    <ul id="messages" style="font-size: .8em;"></ul>
+	</div>
+	<div id="arrayDisplay" style="height: 400px; overflow: auto;float:left;">
+	</div>
+	</div>
+
+	<div id="footer">
+		Copyright &copy; 2007 - 2014 IOLA and Ole Laursen
+	</div>
+
+</body>
+</html>
+

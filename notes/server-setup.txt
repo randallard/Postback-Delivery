@@ -6,7 +6,7 @@ data is pushed to redis list 'postbackQueue'
 set-up pm2 for daemonization (see pm2-setup.txt)
 
 TO DO:
-Probably not as easy as 'key' 'value' - maybe need to update ingest to get params/labels from endpoint
+get postbackData to show up on postback-monitor
 Look into LUA - use predis readme?
 Make sure redis, nginx, and node app start autmatically on server start
 Check other redis.conf values in /etc for optimization
