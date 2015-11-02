@@ -2,7 +2,7 @@
 
 At this point, it is most reliable to sent requests to postback-agent.com/ingest.php
 
-The way I have it set up to view with a browser is to add this line to your etc/hosts file
+The way I have it set up to view with a browser is to add these lines to your etc/hosts file
 (If you're on windows: C:\Windows\System32\drivers\etc\hosts)
 
 45.55.35.202    postback-agent.com
